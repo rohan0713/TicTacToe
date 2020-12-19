@@ -1,7 +1,11 @@
 package com.example.tictactoe;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +19,9 @@ public class MainActivity2 extends AppCompatActivity {
 
     Button[][] board;
     TextView display;
+    MediaPlayer mediaPlayer;
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,12 +38,16 @@ public class MainActivity2 extends AppCompatActivity {
         Button b9 = findViewById(R.id.button9);
         display = findViewById(R.id.display);
         Button reset = findViewById(R.id.reset);
+        mediaPlayer = MediaPlayer.create(this , R.raw.applause8);
+
         reset.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 updateboardstatus();
                 Player = true;
                 turncount = 0;
+                mediaPlayer.pause();
                 updatetext("Player 1 Turn");
             }
         });
@@ -48,6 +59,7 @@ public class MainActivity2 extends AppCompatActivity {
         for(int i = 0; i<board.length; i++){
             for(int j = 0; j<board.length; j++ ){
                 board[i][j].setOnClickListener(new View.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void onClick(View v) {
                         if (v.getId() == R.id.button1) {
@@ -96,6 +108,7 @@ public class MainActivity2 extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void updateboardstatus() {
         for (int i = 0; i<3; i++) {
             for (int j = 0; j<3; j++) {
@@ -108,6 +121,8 @@ public class MainActivity2 extends AppCompatActivity {
 
                 buttons[j].setEnabled(true);
                 buttons[j].setText("");
+                Button b = new Button(this);
+                buttons[j].setBackground(b.getBackground());
 
             }
         }
@@ -120,9 +135,13 @@ public class MainActivity2 extends AppCompatActivity {
             if (boardstatus[i][0] == boardstatus[i][1] && boardstatus[i][0] == boardstatus[i][2]) {
                 if (boardstatus[i][0] == 1) {
                     updatetext("Player 1 winner");
+                    mediaPlayer.seekTo(0);
+                    mediaPlayer.start();
                     break;
                 } else if (boardstatus[i][0] == 0) {
                     updatetext("Player 2 winner");
+                    mediaPlayer.seekTo(0);
+                    mediaPlayer.start();
                     break;
                 }
             }
@@ -133,9 +152,13 @@ public class MainActivity2 extends AppCompatActivity {
             if (boardstatus[0][i] == boardstatus[1][i] && boardstatus[0][i] == boardstatus[2][i]) {
                 if (boardstatus[0][i] == 1) {
                     updatetext("Player 1 winner");
+                    mediaPlayer.seekTo(0);
+                    mediaPlayer.start();
                     break;
                 } else if (boardstatus[0][i] == 0) {
                     updatetext("Player 2 winner");
+                    mediaPlayer.seekTo(0);
+                    mediaPlayer.start();
                     break;
                 }
             }
@@ -145,8 +168,12 @@ public class MainActivity2 extends AppCompatActivity {
         if (boardstatus[0][0] == boardstatus[1][1] && boardstatus[0][0] == boardstatus[2][2]) {
             if (boardstatus[0][0] == 1) {
                 updatetext("Player 1 winner");
+                mediaPlayer.seekTo(0);
+                mediaPlayer.start();
             } else if (boardstatus[0][0] == 0) {
                 updatetext("Player 2 winner");
+                mediaPlayer.seekTo(0);
+                mediaPlayer.start();
             }
         }
 
@@ -154,8 +181,12 @@ public class MainActivity2 extends AppCompatActivity {
         if (boardstatus[0][2] == boardstatus[1][1] && boardstatus[0][2] == boardstatus[2][0]) {
             if (boardstatus[0][2] == 1) {
                 updatetext("Player 1 winner");
+                mediaPlayer.seekTo(0);
+                mediaPlayer.start();
             } else if (boardstatus[0][2] == 0) {
                 updatetext("Player 2 winner");
+                mediaPlayer.seekTo(0);
+                mediaPlayer.start();
             }
         }
     }
@@ -178,14 +209,20 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
+    @SuppressLint("ResourceType")
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void updatevalue(int row, int col, boolean player) {
 
         String text = "";
         int value;
+        int color;
         if (player){
             text = "X";
+            board[row][col].setBackgroundResource(R.drawable.colors);
+
         } else {
             text = "0";
+            board[row][col].setBackgroundResource(R.drawable.colorss);
         }
         if (player){
             value = 1;
@@ -195,7 +232,6 @@ public class MainActivity2 extends AppCompatActivity {
 
         board[row][col].setEnabled(false);
         board[row][col].setText(text);
-
         boardstatus[row][col] = value;
     }
 }
